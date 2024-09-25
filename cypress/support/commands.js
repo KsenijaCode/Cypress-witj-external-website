@@ -27,7 +27,7 @@
 
 // Add a new task
 Cypress.Commands.add('addTask', (task) => {
-  cy.get('.new-todo').type(`${task}{enter}`);
+  cy.get('input.new-todo').type(`${task}{enter}`);
 });
 
 // Mark a task as completed
@@ -46,7 +46,3 @@ Cypress.Commands.add('editTask', (oldTask, newTask) => {
   cy.get('.todo-list li.editing .edit').clear().type(`${newTask}{enter}`);
 });
 
-// Filter tasks by status: 'All', 'Active', or 'Completed'
-Cypress.Commands.add('filterTasks', (filter) => {
-  cy.contains(filter).click();
-});

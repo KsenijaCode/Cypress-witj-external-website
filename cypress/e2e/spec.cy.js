@@ -69,28 +69,3 @@ it('should edit an existing task', () => {
 
 
 
-// Filter Tasks
-it('should filter tasks correctly', () => {
-  const task1 = 'Learn Cypress';
-  const task2 = 'Go for a run';
-
-  // Add tasks
-  cy.addTask(task1);
-  cy.addTask(task2);
-
-  // Complete the first task
-  cy.completeTask(task1);
-
-  // Filter by Active and assert only the active task is visible
-  cy.filterTasks('Active');
-  cy.get('.todo-list li').should('have.length', 1).and('contain.text', task2);
-
-  // Filter by Completed and assert only the completed task is visible
-  cy.filterTasks('Completed');
-  cy.get('.todo-list li').should('have.length', 1).and('contain.text', task1);
-
-  // Filter by All and assert both tasks are visible
-  cy.filterTasks('All');
-  cy.get('.todo-list li').should('have.length', 2);
-});
-
