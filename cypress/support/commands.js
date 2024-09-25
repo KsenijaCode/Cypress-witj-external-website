@@ -23,3 +23,30 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+
+// Add a new task
+Cypress.Commands.add('addTask', (task) => {
+  cy.get('.new-todo').type(`${task}{enter}`);
+});
+
+// Mark a task as completed
+Cypress.Commands.add('completeTask', (task) => {
+  cy.contains('.todo-list li', task).find('.toggle').click();
+});
+
+// Delete a task
+Cypress.Commands.add('deleteTask', (task) => {
+  cy.contains('.todo-list li', task).find('.destroy').invoke('show').click();
+});
+
+// Edit a task
+Cypress.Commands.add('editTask', (oldTask, newTask) => {
+  cy.contains('.todo-list li', oldTask).dblclick();
+  cy.get('.todo-list li.editing .edit').clear().type(`${newTask}{enter}`);
+});
+
+// Filter tasks by status: 'All', 'Active', or 'Completed'
+Cypress.Commands.add('filterTasks', (filter) => {
+  cy.contains(filter).click();
+});

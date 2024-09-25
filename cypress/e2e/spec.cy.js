@@ -2,73 +2,71 @@ const pageUrl = "https://todolist.james.am/"
 
 
 // Add Task
-describe('To-Do List Application', () => {
+describe('To-Do List E2E Tests', () => {
   beforeEach(() => {
-    // Visit the website before each test
     cy.visit('https://todolist.james.am/');
   });
 
   it('should add a new task to the list', () => {
     const newTask = 'Buy groceries';
 
-    // Type a new task in the input box and press Enter
-    cy.get('.new-todo').type(`${newTask}{enter}`);
+    // Add task using the custom command
+    cy.addTask(newTask);
 
-    // Verify that the new task appears in the list
+    // Assert that the task is present in the list
     cy.get('.todo-list li').should('contain.text', newTask);
   });
 });
+
 
 
 // Mark Task as Completed
 it('should mark a task as completed', () => {
   const task = 'Buy groceries';
 
-  // Add a new task first
-  cy.get('.new-todo').type(`${task}{enter}`);
+  // Add task
+  cy.addTask(task);
 
-  // Mark the task as completed by clicking the checkbox
-  cy.get('.todo-list li .toggle').click();
+  // Complete task using custom command
+  cy.completeTask(task);
 
-  // Verify the task has the "completed" class
-  cy.get('.todo-list li').should('have.class', 'completed');
+  // Assert that the task is marked as completed
+  cy.contains('.todo-list li', task).should('have.class', 'completed');
 });
+
 
 
 // Delete Task
 it('should delete a task from the list', () => {
   const task = 'Walk the dog';
 
-  // Add a new task first
-  cy.get('.new-todo').type(`${task}{enter}`);
+  // Add task
+  cy.addTask(task);
 
-  // Delete the task
-  cy.get('.todo-list li .destroy').invoke('show').click();
+  // Delete the task using the custom command
+  cy.deleteTask(task);
 
-  // Verify the task no longer appears in the list
+  // Assert that the task is no longer in the list
   cy.get('.todo-list li').should('not.contain.text', task);
 });
 
 
+
 // Edit Task
 it('should edit an existing task', () => {
-  const task = 'Read a book';
+  const oldTask = 'Read a book';
   const updatedTask = 'Read a book for 30 minutes';
 
-  // Add a new task first
-  cy.get('.new-todo').type(`${task}{enter}`);
+  // Add task
+  cy.addTask(oldTask);
 
-  // Double-click to edit the task
-  cy.get('.todo-list li').dblclick();
+  // Edit the task using custom command
+  cy.editTask(oldTask, updatedTask);
 
-  // Update the task text
-  cy.get('.todo-list li.editing .edit')
-    .clear()
-    .type(`${updatedTask}{enter}`);
-
-  // Verify the task has been updated
+  // Assert that the task has been updated
   cy.get('.todo-list li').should('contain.text', updatedTask);
 });
+
 
 
 // Filter Tasks
@@ -76,22 +74,23 @@ it('should filter tasks correctly', () => {
   const task1 = 'Learn Cypress';
   const task2 = 'Go for a run';
 
-  // Add two tasks
-  cy.get('.new-todo').type(`${task1}{enter}`);
-  cy.get('.new-todo').type(`${task2}{enter}`);
+  // Add tasks
+  cy.addTask(task1);
+  cy.addTask(task2);
 
-  // Mark the first task as completed
-  cy.get('.todo-list li:first .toggle').click();
+  // Complete the first task
+  cy.completeTask(task1);
 
-  // Filter by "Active" and check the visible task
-  cy.contains('Active').click();
+  // Filter by Active and assert only the active task is visible
+  cy.filterTasks('Active');
   cy.get('.todo-list li').should('have.length', 1).and('contain.text', task2);
 
-  // Filter by "Completed" and check the visible task
-  cy.contains('Completed').click();
+  // Filter by Completed and assert only the completed task is visible
+  cy.filterTasks('Completed');
   cy.get('.todo-list li').should('have.length', 1).and('contain.text', task1);
 
-  // Filter by "All" and check that both tasks are visible
-  cy.contains('All').click();
+  // Filter by All and assert both tasks are visible
+  cy.filterTasks('All');
   cy.get('.todo-list li').should('have.length', 2);
 });
+
