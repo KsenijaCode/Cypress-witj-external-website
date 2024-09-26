@@ -17,6 +17,7 @@ describe('To-Do List E2E Tests', () => {
     cy.get('.todo-list li').should('contain.text', newTask);
   });
 
+
 // Mark Task as Completed
 it('should mark a task as completed', () => {
   const task = 'Buy groceries';
@@ -30,6 +31,7 @@ it('should mark a task as completed', () => {
   // Assert that the task is marked as completed
   cy.contains('.todo-list li', task).should('have.class', 'completed');
 });
+
 
 // Delete Task
 it('should delete a task from the list', () => {
@@ -50,6 +52,7 @@ it('should delete completed task from the list', () => {
   cy.addTask(task);
   cy.deleteTask(task);
 });
+
 
 // Edit Task
 it('should edit an existing task', () => {
